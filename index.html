@@ -89,17 +89,16 @@
 
         .image-container {
             width: 100%;
-            height: 230px;
-            background-color: var(--brand-black);
+            aspect-ratio: 16 / 9; /* Mantiene la proporción siempre */
+            background-color: #1a1a1a; /* Fondo negro mientras carga */
             overflow: hidden;
         }
-
+        
         .image-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: grayscale(20%);
-            transition: 0.3s;
+            display: block; /* Evita espacios extraños abajo */
         }
 
         .portfolio-item:hover img {
@@ -257,4 +256,5 @@
 </body>
 
 </html>
+
 
