@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publica Lab | Portfolio Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF6B00; /* Naranja vibrante */
+            --brand-black: #121212;  /* Negro profundo */
+            --brand-white: #FFFFFF;
+            --bg-light: #F4F4F4;
+            --text-dark: #1A1A1A;
+            --text-muted: #666666;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: var(--brand-white);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background-color: var(--brand-black);
+            color: var(--brand-white);
+            padding: 100px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 8px solid var(--brand-orange);
+        }
+
+        .main-logo {
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--brand-orange);
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        /* CONTENEDOR DE TARJETAS */
+        .container {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 40px;
+        }
+
+        /* ESTILO DE LAS TARJETAS */
+        .portfolio-item {
+            background: var(--brand-white);
+            border: 1px solid #e1e1e1;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .portfolio-item:hover {
+            border-color: var(--brand-orange);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .image-container {
+            width: 100%;
+            height: 230px;
+            background-color: var(--brand-black);
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%);
+            transition: 0.3s;
+        }
+
+        .portfolio-item:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        .content {
+            padding: 30px;
+            flex-grow: 1;
+        }
+
+        .category-tag {
+            background: var(--brand-black);
+            color: var(--brand-white);
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            margin: 0 0 12px 0;
+            color: var(--brand-black);
+        }
+
+        .desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        .btn-action {
+            display: inline-block;
+            background: var(--brand-orange);
+            color: var(--brand-white);
+            padding: 12px 24px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .btn-action:hover {
+            background: var(--brand-black);
+        }
+
+        .year-label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--brand-orange);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        #loader { text-align: center; padding: 100px; font-weight: bold; color: var(--brand-orange); }
+
+        footer {
+            background: var(--brand-black);
+            color: var(--brand-white);
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <img src="https://publicalab.com/assets/imgs/logo-publica-blanco.svg" alt="Publica Lab" class="main-logo">
+        <h1>PORTFOLIO</h1>
+        <p>Soluciones Digitales de Alto Impacto</p>
+    </header>
+
+    <div class="container">
+        <div id="loader">CARGANDO PROYECTOS...</div>
+        <main id="portfolio-grid" class="grid"></main>
+    </div>
+
+    <footer>
+        <p>PUBLICA LAB &copy; 2026 | Agencia de Contenidos Digitales</p>
+    </footer>
+
+    <script>
+        const CONFIG = {
+            API_KEY: 'AIzaSyD5dBTQ5IghCAeSQSAsVW0HrY7cQFlsFsc', 
+            SHEET_ID: '1pEZtJ7XkswHX0GRIbXTvbZUXGiuaYdLIIh_4IvNzDlk',
+            RANGE: 'ML!A2:G100' 
+        };
+
+        function formatDriveLink(url) {
+            if (!url || typeof url !== 'string') return 'https://via.placeholder.com/600x400?text=Publica+Lab';
+            const match = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
+            return match && match[1] ? `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800` : url;
+        }
+
+        async function fetchPortfolio() {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${CONFIG.RANGE}?key=${CONFIG.API_KEY}`;
+            const loader = document.getElementById('loader');
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data.error) throw new Error(data.error.message);
+                renderGrid(data.values || []);
+            } catch (error) {
+                loader.innerHTML = `<div style="color:red">ERROR AL CARGAR: ${error.message}</div>`;
+            }
+        }
+
+        function renderGrid(rows) {
+            const grid = document.getElementById('portfolio-grid');
+            grid.innerHTML = rows.map((row) => {
+                const title = row[1] || 'Proyecto';
+                const desc  = row[2] || '';
+                const year  = row[3] || '';
+                const link  = row[4] || '#';
+                const thumb = formatDriveLink(row[5]);
+                const cat   = row[6] || 'CONTENIDO';
+
+                return `
+                    <article class="portfolio-item">
+                        <div class="image-container">
+                            <img src="${thumb}" alt="${title}" loading="lazy" onerror="this.src='https://via.placeholder.com/600x400?text=Publica+Lab'">
+                        </div>
+                        <div class="content">
+                            <span class="category-tag">${cat}</span>
+                            <span class="year-label">${year}</span>
+                            <h3 class="title">${title}</h3>
+                            <p class="desc">${desc}</p>
+                            <a href="${link}" target="_blank" class="btn-action">Ver Detalles</a>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+            document.getElementById('loader').style.display = 'none';
+        }
+
+        fetchPortfolio();
+    </script>
+</body>
+</html>
