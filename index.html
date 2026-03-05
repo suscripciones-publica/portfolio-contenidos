@@ -236,7 +236,8 @@
                 return `
                     <article class="portfolio-item">
                         <div class="image-container">
-                            <img src="${thumb}" alt="${title}" loading="lazy" onerror="this.src='https://via.placeholder.com/600x400?text=Publica+Lab'">
+                            <img src="${thumb}" alt="${title}" loading="lazy" 
+     onerror="this.onerror=null; this.src='https://publicalab.com/assets/imgs/logo-publica-blanco.svg'; this.style.backgroundColor='#121212'; this.style.padding='40px';">
                         </div>
                         <div class="content">
                             <span class="category-tag">${cat}</span>
@@ -256,3 +257,4 @@
 </body>
 
 </html>
+
