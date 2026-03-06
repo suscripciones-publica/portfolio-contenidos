@@ -5,17 +5,19 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Esto asegura que el bot pueda escribir en gh-pages
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Actualizado a v4
 
       - name: Inyectar Secretos en el HTML
         run: |
-          sed -i "s/API_KEY_PLACEHOLDER/${{ secrets.MY_SHEETS_API_KEY }}/g" index.html
-          # sed -i "s/SHEET_ID_PLACEHOLDER/${{ secrets.MY_SHEET_ID }}/g" index.html
-
+          # Usamos | como delimitador por si la API Key tiene caracteres raros
+          sed -i "s|API_KEY_PLACEHOLDER|${{ secrets.MY_SHEETS_API_KEY }}|g" index.html
+          
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: . # La carpeta donde está tu index.html
-          branch: gh-pages # GitHub Pages leerá desde esta rama
+          folder: . 
+          branch: gh-pages
