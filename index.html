@@ -3,259 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publica Lab | Portfolio Digital</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>Publica Lab — Portfolio Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
+        /* ── VARIABLES Y RESET ─────────────────────────────── */
         :root {
-            --brand-orange: #FF6B00; /* Naranja vibrante */
-            --brand-black: #121212;  /* Negro profundo */
-            --brand-white: #FFFFFF;
-            --bg-light: #F4F4F4;
-            --text-dark: #1A1A1A;
-            --text-muted: #666666;
+            --bg: #0D0D0D;
+            --surface: #141414;
+            --border: #2E2E2E;
+            --white: #FFFFFF;
+            --accent: #FF6B00; /* Tu naranja corporativo */
+            --muted: #999999;
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'DM Sans', sans-serif;
+            --transition: 250ms ease;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            background-color: var(--brand-white);
-            color: var(--text-dark);
-            line-height: 1.6;
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { 
+            background: var(--bg); 
+            color: #F0EDE8; 
+            font-family: var(--font-sans); 
+            line-height: 1.6; 
+            overflow-x: hidden;
         }
 
-        /* HERO SECTION */
-        .hero {
-            background-color: var(--brand-black);
-            color: var(--brand-white);
-            padding: 100px 20px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border-bottom: 8px solid var(--brand-orange);
+        /* ── NAVBAR ────────────────────────────────────────── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            height: 70px; background: rgba(13,13,13,0.9);
+            backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 50px;
+        }
+        .nav-logo { font-family: var(--font-serif); font-size: 20px; font-weight: 700; color: var(--white); text-decoration: none; }
+        .nav-logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 30px; list-style: none; }
+        .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; text-transform: uppercase; cursor: pointer; transition: var(--transition); }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+        /* ── HERO SECTION ──────────────────────────────────── */
+        .screen { display: none; padding-top: 70px; min-height: 100vh; }
+        .screen.active { display: block; }
+
+        .hero { padding: 120px 50px; border-bottom: 1px solid var(--border); position: relative; }
+        .hero-title { font-family: var(--font-serif); font-size: clamp(40px, 8vw, 80px); line-height: 1.1; color: var(--white); margin-bottom: 30px; }
+        .hero-title em { color: var(--accent); font-style: normal; }
+        .hero-sub { max-width: 500px; color: var(--muted); font-size: 18px; margin-bottom: 40px; }
+
+        /* ── FILTROS ───────────────────────────────────────── */
+        .filter-bar { 
+            padding: 20px 50px; background: var(--bg); position: sticky; top: 70px; z-index: 90;
+            display: flex; gap: 15px; flex-wrap: wrap; border-bottom: 1px solid var(--border);
+        }
+        .filter-select {
+            background: var(--surface); border: 1px solid var(--border); color: white;
+            padding: 10px 15px; font-size: 12px; border-radius: 4px; outline: none;
         }
 
-        .main-logo {
-            max-width: 300px;
-            height: auto;
-            margin-bottom: 25px;
-        }
-
-        .hero h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            font-size: 2.5rem;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: -1px;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--brand-orange);
-            font-weight: 600;
-            margin-top: 10px;
-        }
-
-        /* CONTENEDOR DE TARJETAS */
-        .container {
-            max-width: 1200px;
-            margin: 60px auto;
-            padding: 0 20px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 40px;
-        }
-
-        /* ESTILO DE LAS TARJETAS */
-        .portfolio-item {
-            background: var(--brand-white);
-            border: 1px solid #e1e1e1;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .portfolio-item:hover {
-            border-color: var(--brand-orange);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
-
-        .image-container {
-            width: 100%;
-            aspect-ratio: 16 / 9; /* Mantiene la proporción siempre */
-            background-color: #1a1a1a; /* Fondo negro mientras carga */
-            overflow: hidden;
-        }
+        /* ── GRID DE PROYECTOS ─────────────────────────────── */
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1px; background: var(--border); }
+        .card { background: var(--surface); padding: 30px; transition: var(--transition); cursor: pointer; }
+        .card:hover { background: #1a1a1a; }
+        .card-thumb { width: 100%; aspect-ratio: 16/9; background: #000; margin-bottom: 20px; overflow: hidden; }
+        .card-thumb img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .card:hover img { transform: scale(1.05); }
+        .card-client { font-size: 11px; text-transform: uppercase; color: var(--accent); letter-spacing: 1px; margin-bottom: 10px; }
+        .card-title { font-family: var(--font-serif); font-size: 20px; color: var(--white); margin-bottom: 15px; }
         
-        .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block; /* Evita espacios extraños abajo */
-        }
+        .tag { font-size: 10px; border: 1px solid var(--border); padding: 4px 10px; text-transform: uppercase; color: var(--muted); margin-right: 5px; }
 
-        .portfolio-item:hover img {
-            filter: grayscale(0%);
-            transform: scale(1.05);
-        }
+        #loader { padding: 100px; text-align: center; color: var(--accent); font-weight: bold; }
 
-        .content {
-            padding: 30px;
-            flex-grow: 1;
-        }
-
-        .category-tag {
-            background: var(--brand-black);
-            color: var(--brand-white);
-            padding: 4px 12px;
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-
-        .title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.4rem;
-            margin: 0 0 12px 0;
-            color: var(--brand-black);
-        }
-
-        .desc {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 25px;
-        }
-
-        .btn-action {
-            display: inline-block;
-            background: var(--brand-orange);
-            color: var(--brand-white);
-            padding: 12px 24px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        }
-
-        .btn-action:hover {
-            background: var(--brand-black);
-        }
-
-        .year-label {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--brand-orange);
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        #loader { text-align: center; padding: 100px; font-weight: bold; color: var(--brand-orange); }
-
-        footer {
-            background: var(--brand-black);
-            color: var(--brand-white);
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .grid { grid-template-columns: 1fr; }
-        }
+        footer { padding: 50px; text-align: center; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <header class="hero">
-        <img src="https://publicalab.com/assets/imgs/logo-publica-blanco.svg" alt="Publica Lab" class="main-logo">
-        <h1>PORTFOLIO</h1>
-        <p>Soluciones Digitales de Alto Impacto</p>
-    </header>
+<nav>
+    <a class="nav-logo" onclick="showScreen('home')">Publica<span>.</span>Lab</a>
+    <ul class="nav-links">
+        <li><a onclick="showScreen('home')" id="btn-home">Inicio</a></li>
+        <li><a onclick="showScreen('proyectos')" id="btn-proyectos">Proyectos</a></li>
+    </ul>
+</nav>
 
-    <div class="container">
-        <div id="loader">CARGANDO PROYECTOS...</div>
-        <main id="portfolio-grid" class="grid"></main>
+<div id="screen-home" class="screen active">
+    <section class="hero">
+        <h1 class="hero-title">El trabajo que<br><em>cuenta</em> la historia.</h1>
+        <p class="hero-sub">Producción de contenido digital de alto impacto para marcas líderes en LATAM.</p>
+    </section>
+    <div class="cards-grid" id="home-grid"></div>
+</div>
+
+<div id="screen-proyectos" class="screen">
+    <div class="filter-bar">
+        <select id="f-cliente" class="filter-select" onchange="applyFilters()"><option value="">Cliente</option></select>
+        <select id="f-anio" class="filter-select" onchange="applyFilters()"><option value="">Año</option></select>
+        <button onclick="resetFilters()" style="background:none; border:none; color:var(--muted); cursor:pointer; font-size:12px;">Limpiar filtros</button>
     </div>
+    <div class="cards-grid" id="proyectos-grid"></div>
+</div>
 
-    <footer>
-        <p>PUBLICA LAB &copy; 2026 | Agencia de Contenidos Digitales</p>
-    </footer>
+<div id="loader">CARGANDO PORTFOLIO...</div>
 
-    <script>
-        const CONFIG = {
-            API_KEY: 'API_KEY_PLACEHOLDER', 
-            SHEET_ID: '1pEZtJ7XkswHX0GRIbXTvbZUXGiuaYdLIIh_4IvNzDlk',
-            RANGE: 'ML!A2:G100' 
-        };
+<footer>
+    <p>© 2026 Publica Lab — Confidencial</p>
+</footer>
 
-        function formatDriveLink(url) {
-            // Si no hay URL, usamos una imagen transparente o un color sólido de respaldo
-            if (!url || typeof url !== 'string') {
-                return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3Crect width='600' height='400' fill='%23121212'/%3E%3C/svg%3E";
-            }
-            const match = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
-            return match && match[1] ? `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800` : url;
-        }
+<script>
+    const CONFIG = {
+        API_KEY: 'API_KEY_PLACEHOLDER', 
+        SHEET_ID: '1pEZtJ7XkswHX0GRIbXTvbZUXGiuaYdLIIh_4IvNzDlk',
+        RANGE: 'ML!A2:G100' 
+    };
 
-        async function fetchPortfolio() {
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${CONFIG.RANGE}?key=${CONFIG.API_KEY}`;
-            const loader = document.getElementById('loader');
+    let ALL_PROJECTS = [];
 
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                if (data.error) throw new Error(data.error.message);
-                renderGrid(data.values || []);
-            } catch (error) {
-                loader.innerHTML = `<div style="color:red">ERROR AL CARGAR: ${error.message}</div>`;
-            }
-        }
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById('screen-' + id).classList.add('active');
+        document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+        document.getElementById('btn-' + id).classList.add('active');
+        window.scrollTo(0,0);
+    }
 
-        function renderGrid(rows) {
-            const grid = document.getElementById('portfolio-grid');
-            grid.innerHTML = rows.map((row) => {
-                const title = row[1] || 'Proyecto';
-                const desc  = row[2] || '';
-                const year  = row[3] || '';
-                const link  = row[4] || '#';
-                const thumb = formatDriveLink(row[5]);
-                const cat   = row[6] || 'CONTENIDO';
+    function formatDriveLink(url) {
+        if (!url || typeof url !== 'string') return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23141414'/%3E%3C/svg%3E";
+        const match = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
+        return match ? `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800` : url;
+    }
 
-                return `
-                    <article class="portfolio-item">
-                        <div class="image-container">
-                            <img src="${thumb}" alt="${title}" loading="lazy" 
-     onerror="this.onerror=null; this.src='https://publicalab.com/assets/imgs/logo-publica-blanco.svg'; this.style.backgroundColor='#121212'; this.style.padding='40px';">
-                        </div>
-                        <div class="content">
-                            <span class="category-tag">${cat}</span>
-                            <span class="year-label">${year}</span>
-                            <h3 class="title">${title}</h3>
-                            <p class="desc">${desc}</p>
-                            <a href="${link}" target="_blank" class="btn-action">Ver Detalles</a>
-                        </div>
-                    </article>
-                `;
-            }).join('');
+    async function fetchData() {
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${CONFIG.RANGE}?key=${CONFIG.API_KEY}`;
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            ALL_PROJECTS = data.values || [];
+            renderGrids(ALL_PROJECTS);
+            populateFilters(ALL_PROJECTS);
             document.getElementById('loader').style.display = 'none';
+        } catch (e) {
+            document.getElementById('loader').innerHTML = "Error al conectar con la base de datos.";
         }
+    }
 
-        fetchPortfolio();
-    </script>
+    function createCard(row) {
+        const thumb = formatDriveLink(row[5]);
+        return `
+            <div class="card" onclick="window.open('${row[4]}', '_blank')">
+                <div class="card-thumb"><img src="${thumb}" loading="lazy"></div>
+                <div class="card-client">${row[6] || 'Contenido'}</div>
+                <div class="card-title">${row[1]}</div>
+                <div>
+                    <span class="tag">${row[3]}</span>
+                    <span class="tag">Digital</span>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderGrids(data) {
+        const homeGrid = document.getElementById('home-grid');
+        const projGrid = document.getElementById('proyectos-grid');
+        
+        homeGrid.innerHTML = data.slice(0, 6).map(row => createCard(row)).join('');
+        projGrid.innerHTML = data.map(row => createCard(row)).join('');
+    }
+
+    function populateFilters(data) {
+        const clientes = [...new Set(data.map(r => r[6]))].sort();
+        const anios = [...new Set(data.map(r => r[3]))].sort();
+        
+        const selCliente = document.getElementById('f-cliente');
+        clientes.forEach(c => selCliente.innerHTML += `<option value="${c}">${c}</option>`);
+    }
+
+    function applyFilters() {
+        const c = document.getElementById('f-cliente').value;
+        const filtered = ALL_PROJECTS.filter(r => !c || r[6] === c);
+        document.getElementById('proyectos-grid').innerHTML = filtered.map(row => createCard(row)).join('');
+    }
+
+    function resetFilters() {
+        document.getElementById('f-cliente').value = "";
+        renderGrids(ALL_PROJECTS);
+    }
+
+    fetchData();
+</script>
 </body>
-
 </html>
-
-
-
